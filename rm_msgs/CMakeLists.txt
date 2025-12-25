@@ -15,7 +15,6 @@ add_message_files(
         BalanceState.msg
         BusState.msg
         DbusData.msg
-        Dart.msg
         ExchangerMsg.msg
         ChassisCmd.msg
         ShootCmd.msg
@@ -26,6 +25,7 @@ add_message_files(
         GimbalPosState.msg
         LegCmd.msg
         LpData.msg
+        LocalHeatData.msg
         LocalHeatState.msg
         KalmanData.msg
         MovingAverageData.msg

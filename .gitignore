@@ -52,3 +52,5 @@ CATKIN_IGNORE
 
 # Doxygen
 rm_description/doc/html/
+
+cmake-build-debug/
