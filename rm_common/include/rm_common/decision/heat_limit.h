@@ -137,6 +137,7 @@ public:
     {
       shooter_cooling_heat_ = data.shooter_id_1_42_mm_cooling_heat;
     }
+    referee_status_change_ = true;
   }
 
   void setRefereeStatus(bool status)
@@ -144,15 +145,21 @@ public:
     referee_is_online_ = status;
   }
 
-  double getShootFrequency() const
+  double getShootFrequency()
   {
     std::lock_guard<std::mutex> lock(heat_mutex_);
-    if (state_ == BURST)
-      return shoot_frequency_;
-    double shooter_cooling_heat =
-        (use_local_heat_ || !referee_is_online_) ? local_shooter_cooling_heat_ : shooter_cooling_heat_;
     if (!referee_is_online_)
       return 5.0;
+    if (state_ == BURST)
+      return shoot_frequency_;
+    if(referee_status_change_)
+    {
+      local_shooter_cooling_heat_ = shooter_cooling_heat_;
+    }
+    referee_status_change_ = false;
+    double shooter_cooling_heat =
+        (use_local_heat_ || !referee_is_online_) ? local_shooter_cooling_heat_ : shooter_cooling_heat_;
+
     if (shooter_cooling_limit_ - shooter_cooling_heat < bullet_heat_)
       return 0.0;
     else if (shooter_cooling_limit_ - shooter_cooling_heat == bullet_heat_)
@@ -237,6 +244,7 @@ private:
   int shooter_cooling_limit_, shooter_cooling_rate_, shooter_cooling_heat_;
   double local_shooter_cooling_heat_{}, heat_protect_threshold_{};
   int once_shoot_num_{};
+  bool referee_status_change_{};
 
   ros::Publisher local_heat_pub_;
   ros::Subscriber shoot_state_sub_;

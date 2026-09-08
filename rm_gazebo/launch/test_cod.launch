@@ -1,0 +1,19 @@
+<launch>
+
+    <arg name="paused" default="false"/>
+
+    <param name="robot_description" command="$(find xacro)/xacro /home/wk/RM/COD-2026RoboMaster-Balance-Simulation_File/URDF/COD_2026_Balance_2_0.urdf
+         use_simulation:=true
+"/>
+
+    <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="world_name" value="$(find rm_gazebo)/worlds/legged_balance/vmc_test.world"/>
+    </include>
+
+    <!-- push robot_description to factory and spawn robot in gazebo -->
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" clear_params="true"
+          args="-z 1.2 -param robot_description -urdf -model COD-2026-Balance-2.0" output="screen"/>
+
+</launch>
