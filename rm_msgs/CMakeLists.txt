@@ -11,7 +11,10 @@ find_package(catkin REQUIRED COMPONENTS
 
 add_message_files(
         FILES
+        PowerModelFit.msg
         ActuatorState.msg
+        AimCompare.msg
+        AssemblyErrorData.msg
         BalanceState.msg
         BulletSolverData.msg
         BusState.msg
@@ -24,6 +27,7 @@ add_message_files(
         ShootCmd.msg
         ShootState.msg
         ShootBeforehandCmd.msg
+        GimbalAimCmd.msg
         GimbalCmd.msg
         GimbalDesError.msg
         GimbalPosState.msg
@@ -38,6 +42,7 @@ add_message_files(
         LocalHeatState.msg
         KalmanData.msg
         MovingAverageData.msg
+        MPCGimbalAimCmd.msg
         GpioData.msg
         TofRadarData.msg
         MultiDofCmd.msg
@@ -47,6 +52,7 @@ add_message_files(
         CustomControllerData.msg
         VTKeyboardMouseData.msg
         VTReceiverControlData.msg
+        VideoPacket.msg
 )
 
 add_service_files(
@@ -113,6 +119,8 @@ add_message_files(
         RadarWirelessEnemyRobotBuff.msg
         RadarWirelessEnemyRobotHp.msg
         RadarWirelessEnemyRobotPos.msg
+        CustomClientCmdData.msg
+        RobotCustomData.msg
         RobotCustomData2.msg
         VisualizeStateData.msg
         PowerManagementSampleAndStatusData.msg
@@ -125,7 +133,6 @@ add_message_files(
 add_action_files(
         FILES
         Engineer.action
-        QueryGlobalLocalization.action
 )
 # Generate added messages and services with any dependencies listed here
 generate_messages(

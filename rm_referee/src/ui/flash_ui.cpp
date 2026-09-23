@@ -229,5 +229,39 @@ void BurstFlashUi::updateBurstTimeData(const rm_msgs::ManualToReferee::ConstPtr&
   start_burst_time_ = data->start_burst_time;
   display(ros::Time::now());
 }
+
+void CapacityRunOutFlashUi::display(const ros::Time& time)
+{
+  FlashUi::updateFlashUiForQueue(time, low_state_, true);
+}
+
+void CapacityRunOutFlashUi::updateCapacityData(const rm_msgs::PowerManagementSampleAndStatusData& data,
+                                               const ros::Time& last_get_data_time)
+{
+  const double capacity = data.capacity_remain_charge;
+  bool new_low_state = low_state_;
+
+  // First message: only send UI when low; avoid spamming an initial DELETE.
+  if (!has_state_)
+  {
+    has_state_ = true;
+    low_state_ = capacity < threshold_low_;
+    if (low_state_)
+      display(last_get_data_time);
+    return;
+  }
+
+  // With hysteresis to avoid flicker around the boundary.
+  if (!low_state_ && capacity < threshold_low_)
+    new_low_state = true;
+  else if (low_state_ && capacity > threshold_high_)
+    new_low_state = false;
+
+  if (new_low_state != low_state_)
+  {
+    low_state_ = new_low_state;
+    display(last_get_data_time);
+  }
+}
 }  // namespace rm_referee
 // namespace rm_referee
