@@ -3,5 +3,6 @@ float32 battery_power
 float32 chassis_power
 uint8 state_machine_running_state
 uint8 error_code
+uint8 no_discharge_code
 
 time stamp
