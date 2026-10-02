@@ -98,7 +98,7 @@ public:
   virtual void updateGameStatus(const rm_msgs::GameStatus data)
   {
   }
-  virtual void updateCapacityData(const rm_msgs::PowerManagementSampleAndStatusData data)
+  virtual void updateCapacityData(const rm_msgs::SuperPowerCanData data)
   {
   }
   virtual void updatePowerHeatData(const rm_msgs::PowerHeatData data)
@@ -263,7 +263,7 @@ public:
   {
     power_limit_->setChassisPowerBuffer(data);
   }
-  void updateCapacityData(const rm_msgs::PowerManagementSampleAndStatusData data) override
+  void updateCapacityData(const rm_msgs::SuperPowerCanData data) override
   {
     power_limit_->setCapacityData(data);
   }
@@ -284,9 +284,9 @@ public:
   {
     msg_.wireless_state = state;
   }
-  void sendChassisCommand(const ros::Time& time, bool is_gyro)
+  void sendChassisCommand(const ros::Time& time, bool is_gyro) //test
   {
-    power_limit_->setLimitPower(msg_, is_gyro);
+    msg_.expect_state = power_limit_->setLimitPower(msg_, is_gyro);
     msg_.accel.linear.x = accel_x_.output(msg_.power_limit);
     msg_.accel.linear.y = accel_y_.output(msg_.power_limit);
     msg_.accel.angular.z = accel_z_.output(msg_.power_limit);
